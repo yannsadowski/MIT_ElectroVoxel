@@ -10,7 +10,8 @@ The final objective is to use reinforcement learning to makes electrovoxels go t
 
 ### Electrovoxel Movement Simulation
 - The `draft` folder contains the initial version of the electrovoxel environment.
-- This environment encapsulates all the movements of electrovoxels, as showcased in the video located at `draft/media/Electrovoxel Simulation 2023-12-11 22-51-40.mp4`.
+- This environment encapsulates all the movements of electrovoxels, as showcased in the gif.
+![Texte alternatif](draft\media\Electrovoxel-Simulation-2023-12-11-22-51-40.gif)
 
 ### Interactive Interface
 - An interactive interface is included to facilitate the creation of shapes using electrovoxels.
