@@ -94,14 +94,14 @@ class ElectroVoxel:
             'left': [(0, 1), (0, -1)],
             'right': [(0, 1), (0, -1)]
         }
-        vortex_per=0
-        # Vérifiez si un vortex est présent sur l'un des axes perpendiculaires
+        voxel_per=0
+        # Vérifiez si un voxel est présent sur l'un des axes perpendiculaires
         for axis in perpendicular_axes[direction]:
             if self.state.get(axis):
-                base_axis=axis # Vortex qui est la base du mouvement de pivot
-                vortex_per=vortex_per+1# Un vortex est détecté sur l'axe perpendiculaire, mais pas 2 alors mouvement possible
-        # print(vortex_per)
-        if vortex_per == 2 or vortex_per == 0:
+                base_axis=axis # voxel qui est la base du mouvement de pivot
+                voxel_per=voxel_per+1# Un voxel est détecté sur l'axe perpendiculaire, mais pas 2 alors mouvement possible
+        # print(voxel_per)
+        if voxel_per == 2 or voxel_per == 0:
             return False
 
         if direction == 'up':
@@ -191,14 +191,14 @@ class ElectroVoxel:
             'right': [(0, 1), (0, -1)]
         }
 
-        vortex_per=0
-        # Vérifiez si un vortex est présent sur l'un des axes perpendiculaires
+        voxel_per=0
+        # Vérifiez si un voxel est présent sur l'un des axes perpendiculaires
         for axis in perpendicular_axes[direction]:
             if self.state.get(axis):
-                base_axis=axis # Vortex qui est la base du mouvement de pivot
-                vortex_per=vortex_per+1# Un vortex est détecté sur l'axe perpendiculaire, mais pas 2 alors mouvement possible
-        print(vortex_per)
-        if vortex_per == 2 or vortex_per == 0:
+                base_axis=axis # voxel qui est la base du mouvement de pivot
+                voxel_per=voxel_per+1# Un voxel est détecté sur l'axe perpendiculaire, mais pas 2 alors mouvement possible
+        print(voxel_per)
+        if voxel_per == 2 or voxel_per == 0:
             return False
 
 

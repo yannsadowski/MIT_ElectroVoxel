@@ -4,15 +4,15 @@ import pandas as pd
 from electrovoxel import ElectroVoxel
 
 
-def detect_connections(vortex, vortexes, voxel_size):
+def detect_connections(voxel, voxels, voxel_size):
     # Initialiser les connections avec toutes les positions possibles à False
     connections = {(dx, dy): False for dy in range(-2, 3) for dx in range(-2, 3) if (dx, dy) != (0, 0)}
 
-    for other in vortexes:
-        if other != vortex:
+    for other in voxels:
+        if other != voxel:
             # Calculer la différence en x et y
-            dx = (other.x - vortex.x) // voxel_size
-            dy = (other.y - vortex.y) // voxel_size
+            dx = (other.x - voxel.x) // voxel_size
+            dy = (other.y - voxel.y) // voxel_size
             
             # Vérifier si les coordonnées sont dans le rayon de détection
             if abs(dx) <= 2 and abs(dy) <= 2 and (dx, dy) in connections:
@@ -45,19 +45,19 @@ def create_form(filename):
     # Lire les données depuis le fichier CSV
     df = pd.read_csv(filename)
 
-    # Création d'instances d'ElectroVortex à partir du fichier CSV
-    vortexes = [ElectroVoxel(x * voxel_size, y * voxel_size, charge=1, size=voxel_size, color="white") for x, y in zip(df['X'], df['Y'])]
-    return vortexes
+    # Création d'instances d'Electrovoxel à partir du fichier CSV
+    voxels = [ElectroVoxel(x * voxel_size, y * voxel_size, charge=1, size=voxel_size, color="white") for x, y in zip(df['X'], df['Y'])]
+    return voxels
 
-def env_state(vortexes):
+def env_state(voxels):
     # Déterminer toutes les clés uniques (positions relatives) pour les colonnes
-    all_keys = sorted({key for vortex in vortexes for key in detect_connections(vortex, vortexes, voxel_size)})
+    all_keys = sorted({key for voxel in voxels for key in detect_connections(voxel, voxels, voxel_size)})
 
     # Préparer les données pour le DataFrame
     data = {key: [] for key in all_keys}
     
-    for vortex in vortexes:
-        connections = detect_connections(vortex, vortexes, voxel_size)
+    for voxel in voxels:
+        connections = detect_connections(voxel, voxels, voxel_size)
 
         # Ajouter les données de connexion pour cet électrovoxel
         for key in all_keys:
@@ -110,20 +110,19 @@ screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption("Electrovoxel Simulation")
 
 
-vortexes = create_form("draft/forme/carre_9_electrovoxels.csv")
-state_vortexes = env_state(vortexes)
-vortexes_final = create_form("draft/forme/croix_9_electrovoxels.csv")
-state_vortexes_final = env_state(vortexes_final)
-print(state_vortexes)
-print(calculate_difference_percentage(state_vortexes, state_vortexes_final))
+voxels = create_form("draft/forme/carre_9_electrovoxels.csv")
+state_voxels = env_state(voxels)
+voxels_final = create_form("draft/forme/croix_9_electrovoxels.csv")
+state_voxels_final = env_state(voxels_final)
+print(state_voxels)
+print(calculate_difference_percentage(state_voxels, state_voxels_final))
 
-for vortex in vortexes:
-    connections = detect_connections(vortex, vortexes,voxel_size)
-    vortex.update(connections)
-print(vortexes[0].state)
+for voxel in voxels:
+    connections = detect_connections(voxel, voxels,voxel_size)
+    voxel.update(connections)
+print(voxels[0].state)
 
-# Initialize the grid
-grid = np.random.rand(*grid_size)
+
 # Couleurs
 background_color = (255, 255, 255)  # Blanc
 grid_color = (200, 200, 200)  # Gris clair
@@ -145,9 +144,9 @@ while running:
             x_click, y_click = event.pos
             #print(x, y)
     # Détecter et mettre à jour les connexions pour chaque ElectroVoxel
-    for vortex in vortexes:
-        connections = detect_connections(vortex, vortexes,voxel_size)
-        vortex.update(connections)
+    for voxel in voxels:
+        connections = detect_connections(voxel, voxels,voxel_size)
+        voxel.update(connections)
 
     # Affichage
     screen.fill(background_color)  # Fond blanc
@@ -155,14 +154,14 @@ while running:
     for x in range(0, screen_size[0], voxel_size):
         for y in range(0, screen_size[1], voxel_size):
             pygame.draw.rect(screen, grid_color, (x, y, voxel_size, voxel_size), 1)
-    # Dessiner les vortexes
-    for vortex in vortexes:
-        vortex.draw(screen)
+    # Dessiner les voxels
+    for voxel in voxels:
+        voxel.draw(screen)
 
     
 
     # Vérifiez quel ElectroVoxel a été cliqué
-    for electrovoxel in vortexes:
+    for electrovoxel in voxels:
     # Créez un Rect pour représenter la zone de l'ElectroVoxel
         electrovoxel_rect = pygame.Rect(electrovoxel.x, electrovoxel.y, electrovoxel.size, electrovoxel.size)
         #pygame.draw.rect(screen, (255, 0, 0), electrovoxel_rect, 1)  # Dessiner le rect en rouge pour visualiser
